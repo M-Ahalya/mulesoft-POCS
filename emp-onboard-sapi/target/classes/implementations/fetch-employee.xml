@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="fetch-employeeFlow" doc:id="c2563b14-64e4-495b-afbf-56b50c1c099f" >
+		<logger level="INFO" doc:name="Copy_of_Entry Log" doc:id="3ae26ccc-c116-4beb-96d1-00065bce8caa" message="Started fetch employee flow" />
+		<ee:transform doc:name="Copy_of_Transform Message" doc:id="95164199-9a9a-4664-89d3-8fc96ec5ec21" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  empid: 100,
+  empname: "Ravi",
+  status: "A"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<scatter-gather doc:name="Scatter-Gather" doc:id="9ff406d2-e864-48f6-aec6-bf00758d1a5f" >
+			<route >
+				<ee:transform doc:name="Transform Message" doc:id="6a04efd2-a64c-401b-bb5a-c4ef2bd641ed" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+[{
+	"empID": 100,
+	"empName": "test1",
+	"empStatus": "A"
+},
+{
+	"empID": 101,
+	"empName": "test2",
+	"empStatus": "A"
+},
+{
+	"empID": 102,
+	"empName": "test3",
+	"empStatus": "A"
+}
+]]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</route>
+			<route >
+				<ee:transform doc:name="Transform Message" doc:id="27100b0e-a62c-4003-a7e0-9c107542e24f">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+[{
+	"empID": 100,
+	"docVerification": "pass"
+},
+{
+	"empID": 101,
+	"docVerification": "fail"
+},
+{
+	"empID": 102,
+	"docVerification": "pass"
+}
+]]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+			</route>
+			<route >
+				<ee:transform doc:name="Transform Message" doc:id="3a0cc449-e147-4853-9291-06ac3bd70dcd" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+[{
+	"empID": 100,
+	"diagnosisCheck": "Pass",
+	"criminalCheck": "Pass"
+},
+{
+	"empID": 101,
+	"diagnosisCheck": "Pass",
+	"criminalCheck": "fail"
+},
+{
+	"empID": 102,
+	"diagnosisCheck": "fail",
+	"criminalCheck": "Pass"
+}
+]]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</route>
+		</scatter-gather>
+		<ee:transform doc:name="Transform Message" doc:id="8080fd42-c2de-4157-97d4-69fef979aed7" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	employee: payload."0".payload orderBy $.empID map ( emp , indexOfPayload01 ) -> {
+		empID: emp.empID,
+		empName: emp.empName,
+		empStatus: emp.empStatus,
+		check: payload."1".payload filter ($.empID == emp.empID) map ( doc , indexOfPayload01 ) -> {
+			doc: doc.docVerification,
+			bg: payload."2".payload filter ($.empID == emp.empID) map ( bg , indexOfPayload01 ) -> {
+				"diagnosisCheck": bg.diagnosisCheck,
+				"criminalCheck": bg.criminalCheck
+			}
+		}
+	}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="6f1cdd57-8cd0-44d8-9a43-8b74728c3896" message="#[payload]"/>
+	</flow>
+</mule>

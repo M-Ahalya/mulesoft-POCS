@@ -1,0 +1,43 @@
+{
+  "configs": [
+    "implementations/add-employee.xml",
+    "implementations/update-employee.xml",
+    "global.xml",
+    "implementations/fetch-employee.xml",
+    "implementations/delete-employee.xml",
+    "global-error-handler.xml",
+    "emp-onboard-sapi.xml"
+  ],
+  "secureProperties": [],
+  "redeploymentEnabled": true,
+  "name": "com.mycompany:emp-onboard-sapi:1.0.0-SNAPSHOT",
+  "minMuleVersion": "4.2.0",
+  "requiredProduct": "MULE_EE",
+  "classLoaderModelLoaderDescriptor": {
+    "id": "mule",
+    "attributes": {
+      "exportedPackages": [],
+      "exportedResources": [
+        "api/emp-onboard-sapi.raml",
+        "application-types.xml",
+        "emp-onboard-sapi-dev.yaml",
+        "emp-onboard-sapi-load.yaml",
+        "emp-onboard-sapi-prod.yaml",
+        "emp-onboard-sapi-test.yaml",
+        "emp-onboard-sapi.xml",
+        "examples/emp-op.json",
+        "global-error-handler.xml",
+        "global.xml",
+        "implementations/add-employee.xml",
+        "implementations/delete-employee.xml",
+        "implementations/fetch-employee.xml",
+        "implementations/update-employee.xml",
+        "log4j2.xml"
+      ]
+    }
+  },
+  "bundleDescriptorLoader": {
+    "id": "mule",
+    "attributes": {}
+  }
+}

@@ -1,0 +1,10 @@
+[{
+	"empID": 100,
+	"empName": "test1",
+	"empStatus": "A",
+	"empAddress": "India",
+	"empPhone": "878990",
+	"diagnosisCheck": "fail",
+	"criminalCheck": "Pass"
+}
+]

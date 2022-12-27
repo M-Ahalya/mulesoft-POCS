@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
+  <types:catalog>
+    <types:type name="emp-op" format="json">
+      <types:shape format="weave" example="examples/emp-op.json"><![CDATA[%dw 2.0
+
+type emp_op = Array<{|  empID: Number {"typeId": "int"},   empName: String,   empStatus: String,   empAddress: String,   empPhone: String,   diagnosisCheck: String,   criminalCheck: String|}> {"example": "[{\"empID\":100,\"empName\":\"test1\",\"empStatus\":\"A\",\"empAddress\":\"India\",\"empPhone\":\"878990\",\"diagnosisCheck\":\"fail\",\"criminalCheck\":\"Pass\"}]"}
+
+]]></types:shape>
+    </types:type>
+  </types:catalog>
+  <types:enrichment select="#8080fd42-c2de-4157-97d4-69fef979aed7">
+    <types:processor-declaration>
+      <types:output-event>
+        <types:message>
+          <types:payload type="emp-op"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+</types:mule>
