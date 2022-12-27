@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="2750af65-da7b-4d43-aa06-9ec9928032dc">
+		<http:request-connection host="dummy.restapiexample.com"/>
+	</http:request-config>
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="30cb533a-4891-4409-b23c-e0914a42c234" >
+		<http:listener-connection host="0.0.0.0" port="8082" />
+	</http:listener-config>
+	<flow name="poc1_InvokeRestUrlFlow" doc:id="abe49334-9e73-4e59-80b3-a99fc47a2734" >
+		<http:listener doc:name="Employees" doc:id="cd1c62ef-8953-4776-aaf8-267fbabbd6c0" path="/getemployees" config-ref="HTTP_Listener_config" allowedMethods="GET"/>
+		<http:request method="GET" doc:name="Get_EmployeeData" doc:id="0e911d9b-dc7b-47eb-a319-96cf695c1e54" config-ref="HTTP_Request_configuration" path="/api/v1/employees"/>
+		<logger level="INFO" doc:name="Logger" doc:id="6d1bab4f-cb24-4094-bbc5-d62c165745dc" />
+	</flow>
+</mule>
